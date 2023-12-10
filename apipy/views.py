@@ -3,9 +3,12 @@ import numpy as np
 import pandas as pd
 from sklearn import tree
 import joblib
+import os
 
 def train(request):
-    training = pd.read_csv("apipy/tic_tac_toe.csv")
+    file_path = os.path.join(os.path.expanduser("~"), "SampleDjango", "tic_tac_toe.csv")
+    training = pd.read_csv(file_path)
+    #training = pd.read_csv("apipy/tic_tac_toe.csv")
     training["top-left-square"] = training["top-left-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
     training["top-middle-square"] = training["top-middle-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
     training["top-right-square"] = training["top-right-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
