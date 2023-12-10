@@ -39,8 +39,9 @@ def train(request):
     #Supply the method with the input variable X_input and the target variable y_target
     clf_train = clf_train.fit(X_input, y_target)
 
+    file_path2 = os.path.join(os.path.expanduser("~"), "SampleDjango", "decision_tree_model.joblib")
     # Save the model to a file
-    joblib.dump(clf_train, "apipy/decision_tree_model.joblib")
+    joblib.dump(clf_train, file_path2)
     
     return HttpResponse("Training successful")
 
@@ -55,7 +56,8 @@ def legal_moves_generator(current_board_state):
     return legal_moves_dict
 
 def fetch_next_move(legal_moves_dict):
-  clf_train = joblib.load("apipy/decision_tree_model.joblib")
+  file_path = os.path.join(os.path.expanduser("~"), "SampleDjango", "decision_tree_model.joblib")
+  clf_train = joblib.load(file_path)
   for i,j in legal_moves_dict:
     if clf_train.predict([legal_moves_dict[(i,j)]]) == 1:
       return np.array(legal_moves_dict[(i,j)])
