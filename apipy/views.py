@@ -5,7 +5,7 @@ from sklearn import tree
 import joblib
 
 def train(request):
-    training = pd.read_csv("tic_tac_toe.csv")
+    training = pd.read_csv("apipy/tic_tac_toe.csv")
     training["top-left-square"] = training["top-left-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
     training["top-middle-square"] = training["top-middle-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
     training["top-right-square"] = training["top-right-square"].apply(lambda toLabel: 0 if toLabel == 'x'  else 1 if toLabel == 'o'  else 2)
@@ -37,7 +37,7 @@ def train(request):
     clf_train = clf_train.fit(X_input, y_target)
 
     # Save the model to a file
-    joblib.dump(clf_train, "decision_tree_model.joblib")
+    joblib.dump(clf_train, "apipy/decision_tree_model.joblib")
     
     return HttpResponse("Training successful")
 
@@ -52,7 +52,7 @@ def legal_moves_generator(current_board_state):
     return legal_moves_dict
 
 def fetch_next_move(legal_moves_dict):
-  clf_train = joblib.load("decision_tree_model.joblib")
+  clf_train = joblib.load("apipy/decision_tree_model.joblib")
   for i,j in legal_moves_dict:
     if clf_train.predict([legal_moves_dict[(i,j)]]) == 1:
       return np.array(legal_moves_dict[(i,j)])
