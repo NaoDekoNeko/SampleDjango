@@ -55,16 +55,12 @@ def legal_moves_generator(current_board_state,turn_monitor):
                 legal_moves_dict[(i,j)]=board_state_copy.flatten()
     return legal_moves_dict
 
-def fetch_next_move(legal_moves_dict, turn_monitor):
+def fetch_next_move(legal_moves_dict):
   file_path = os.path.join(os.path.expanduser("~"), "SampleDjango", "decision_tree_model.joblib")
   clf_train = joblib.load(file_path)
   
-  if turn_monitor == 1: 
-    turn = 0
-  else: turn = 1
-  
   for i,j in legal_moves_dict:
-    if clf_train.predict([legal_moves_dict[(i,j)]]) == turn:
+    if clf_train.predict([legal_moves_dict[(i,j)]]) == 0:
       return np.array(legal_moves_dict[(i,j)])
   for i,j in legal_moves_dict:
       return np.array(legal_moves_dict[(i,j)])
@@ -91,7 +87,7 @@ def recibe(request, x0, x1, x2, x3, x4, x5, x6, x7, x8, turn_monitor):
 
     print("Diccionario:", legal_moves_dict)
 
-    next_move = fetch_next_move(legal_moves_dict, turn_monitor)
+    next_move = fetch_next_move(legal_moves_dict)
     print("\nindice next:",next_move)
     current_board_state = current_board_state.reshape(9)
 
