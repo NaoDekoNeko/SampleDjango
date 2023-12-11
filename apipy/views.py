@@ -45,21 +45,24 @@ def train(request):
     
     return HttpResponse("Training successful")
 
-def legal_moves_generator(current_board_state):
+def legal_moves_generator(current_board_state,turn_monitor):
     legal_moves_dict={}
     for i in range(current_board_state.shape[0]):
         for j in range(current_board_state.shape[1]):
             if current_board_state[i,j]==2:
                 board_state_copy=current_board_state.copy()
-                board_state_copy[i,j]=1
+                board_state_copy[i,j]=turn_monitor
                 legal_moves_dict[(i,j)]=board_state_copy.flatten()
     return legal_moves_dict
 
-def fetch_next_move(legal_moves_dict):
+def fetch_next_move(legal_moves_dict, turn_monitor):
   file_path = os.path.join(os.path.expanduser("~"), "SampleDjango", "decision_tree_model.joblib")
   clf_train = joblib.load(file_path)
+  if turn_monitor == 1: 
+    turn = 0
+  else: turn = 1
   for i,j in legal_moves_dict:
-    if clf_train.predict([legal_moves_dict[(i,j)]]) == 1:
+    if clf_train.predict([legal_moves_dict[(i,j)]]) == turn:
       return np.array(legal_moves_dict[(i,j)])
   for i,j in legal_moves_dict:
       return np.array(legal_moves_dict[(i,j)])
@@ -75,18 +78,18 @@ def find_different_element(array1, array2):
         # Si no hay elementos diferentes, devuelve -1
         return -1
   
-def recibe(request, x0, x1, x2, x3, x4, x5, x6, x7, x8):
+def recibe(request, x0, x1, x2, x3, x4, x5, x6, x7, x8, turn_monitor):
     # Crear el dataframe
     current_board_state = np.array([[x0, x1, x2], [x3, x4, x5], [x6, x7, x8]])
 
     current_board_state = current_board_state.astype(int)
 
     # Obtener los movimientos legales
-    legal_moves_dict = legal_moves_generator(current_board_state)
+    legal_moves_dict = legal_moves_generator(current_board_state, turn_monitor)
 
     print("Diccionario:", legal_moves_dict)
 
-    next_move = fetch_next_move(legal_moves_dict)
+    next_move = fetch_next_move(legal_moves_dict, turn_monitor)
     print("\nindice next:",next_move)
     current_board_state = current_board_state.reshape(9)
 

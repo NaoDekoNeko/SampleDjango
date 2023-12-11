@@ -19,6 +19,6 @@ from django.urls import path
 from apipy.views import recibe, train
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('apipy/<x0>/<x1>/<x2>/<x3>/<x4>/<x5>/<x6>/<x7>/<x8>',recibe),
+    path('apipy/<x0>/<x1>/<x2>/<x3>/<x4>/<x5>/<x6>/<x7>/<x8>/<turn_monitor>',recibe),
     path('apipy/train/',train)
 ]
